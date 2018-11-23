@@ -60,8 +60,7 @@ public class Devolucion implements Comparable<Devolucion> {
 
 	@Override
 	public String toString() {
-		return "ISBN: " + isbn + " Titulo: " + titulo + " Devuelto: " + devuelto + " Fecha de Devolucion:"
-				+ fechaDevuelto + "\n";
+		return "ISBN: " + isbn + " Titulo: " + titulo + " Fecha de Devolucion:" + fechaDevuelto + "\n";
 	}
 
 }
