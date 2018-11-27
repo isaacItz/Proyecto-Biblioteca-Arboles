@@ -1,16 +1,32 @@
 package vista;
 
-import java.awt.*;
+import static modelox.Utileria.continuar;
+import static modelox.Utileria.escribir;
+import static modelox.Utileria.leerCadena;
+import static modelox.Utileria.leerInt;
+import static modelox.Utileria.leerchar;
 
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 
-import static modelox.Utileria.*;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.border.EmptyBorder;
 
-import modelo.*;
+import modelo.Alumno;
+import modelo.Devolucion;
+import modelo.Devoluciones;
+import modelo.Domicilio;
+import modelo.Estante;
+import modelo.Grupo;
+import modelo.Libro;
+import modelo.Prestamo;
+import modelo.Prestamos;
 
 public class Principal extends JFrame {
 
@@ -179,7 +195,7 @@ public class Principal extends JFrame {
 						escribir("El alumno no existe");
 				} else
 					escribir("El grupo esta vacio");
-			} while (continuar("Desea elimnar otro alumno?"));
+			} while (!grupo.estaVacio() && continuar("Desea elimnar otro alumno?"));
 		}
 
 	}
@@ -212,7 +228,8 @@ public class Principal extends JFrame {
 					String numControl = leerCadena("Ingrese su numero de control");
 					if (grupo.existeAlumno(numControl)) {
 						Alumno alumno = grupo.consultar(numControl);
-						if (alumno != null) {
+						if (!prestamos.hasPres(numControl)) {
+
 							int opModificar = 0;
 							int salid = 0;
 
@@ -278,7 +295,7 @@ public class Principal extends JFrame {
 							} while (opModificar != salid);
 							escribir("Alumno modificado con exito");
 						} else
-							escribir("El alumno no tiene datos");
+							escribir("El Alumno Tiene Libros Prestados, No Puede Modificarse");
 					} else
 						escribir("El alumno no existe");
 				} else
@@ -348,7 +365,8 @@ public class Principal extends JFrame {
 					String isbn = leerCadena("Ingrese el ISBN");
 					if (estante.existeLibro(isbn)) {
 						Libro libro = estante.consultar(isbn);
-						if (libro != null) {
+						if (!libro.estaPrestado()) {
+
 							int opModificar = 0;
 							int salid = 0;
 
@@ -377,7 +395,7 @@ public class Principal extends JFrame {
 							} while (opModificar != salid);
 							escribir("Libro modificado con exito");
 						} else
-							escribir("El Libro no tiene datos");
+							escribir("El Libro esta Prestado, No puede Ser Modificado ");
 					} else
 						escribir("El Libro no existe");
 				} else
@@ -395,7 +413,7 @@ public class Principal extends JFrame {
 				if (!estante.estaVacio()) {
 					String isbn = leerCadena("Ingrese el ISBN");
 					if (estante.existeLibro(isbn)) {
-						if (!(estante.consultar(isbn).isEstaPrestado() == true)) {
+						if (!(estante.consultar(isbn).estaPrestado() == true)) {
 							estante.eliminar(isbn);
 							escribir("Libro eliminado con exito");
 						} else
@@ -404,7 +422,7 @@ public class Principal extends JFrame {
 						escribir("El Libro no existe");
 				} else
 					escribir("El estante esta vacio");
-			} while (continuar("Desea eliminar otro Libro?"));
+			} while (!estante.estaVacio() && continuar("Desea eliminar otro Libro?"));
 		}
 
 	}
@@ -422,7 +440,7 @@ public class Principal extends JFrame {
 							String isbn = leerCadena("Ingrese el isbn del libro");
 							if (estante.existeLibro(isbn)) {
 								Libro l = estante.consultar(isbn);
-								if (!l.isEstaPrestado()) {
+								if (!l.estaPrestado()) {
 									prestamo = new Prestamo(numControl, isbn, LocalDate.now(), null);
 									prestamo.setFechaDeEntrega(prestamos.asignarFechaEntrega(prestamo));
 									prestamos.agregarPrestamo(prestamo);
@@ -439,7 +457,7 @@ public class Principal extends JFrame {
 						escribir("No hay libros registrados");
 				} else
 					escribir("No hay alumnos registrados");
-			} while (continuar("Desea hacer otro prestamo?"));
+			} while (estante.hayDisponibles(prestamos) && continuar("Desea hacer otro prestamo?"));
 
 		}
 
@@ -465,7 +483,7 @@ public class Principal extends JFrame {
 				if (!prestamos.hayPrestamos()) {
 					String isbn = leerCadena("Ingrese el isbn");
 					if (estante.existeLibro(isbn)) {
-						if (estante.consultar(isbn).isEstaPrestado()) {
+						if (estante.consultar(isbn).estaPrestado()) {
 							Prestamo prestamo = prestamos.consultar(isbn);
 							Devolucion devolucion = new Devolucion(isbn, estante.consultar(isbn).getTitulo(), true,
 									null);
@@ -489,7 +507,7 @@ public class Principal extends JFrame {
 						escribir("El libro no esta registrado");
 				} else
 					escribir("No hay libros prestados");
-			} while (continuar("Desea devolver otro libro?"));
+			} while (!devoluciones.estaVacio() && continuar("Desea devolver otro libro?"));
 		}
 
 	}
@@ -498,7 +516,7 @@ public class Principal extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (!devoluciones.hayDevoluciones())
+			if (!devoluciones.estaVacio())
 				escribir(devoluciones.listaDevoluciones());
 			else
 				escribir("No han devuelto ningun libro");
@@ -540,5 +558,4 @@ public class Principal extends JFrame {
 		salida += (i + 1) + ".- salir";
 		return leerInt(salida);
 	}
-
 }

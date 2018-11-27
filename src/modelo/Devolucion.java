@@ -55,7 +55,7 @@ public class Devolucion implements Comparable<Devolucion> {
 
 	@Override
 	public int compareTo(Devolucion o) {
-		return 0;
+		return isbn.compareTo(o.isbn);
 	}
 
 	@Override

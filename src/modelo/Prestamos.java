@@ -2,18 +2,18 @@ package modelo;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class Prestamos {
 	private Arbol<Prestamo> listaPrestamos;
-	Estante estante;
-	Grupo grupo;
+	private Estante estante;
+	private Grupo grupo;
 	private String salida;
 	private int contadorL;
+	private int contador;
 
 	public Prestamos(Estante estante, Grupo grupo) {
 		contadorL = 0;
+		contador = 0;
 		this.grupo = grupo;
 		this.estante = estante;
 		this.listaPrestamos = new Arbol<>();
@@ -23,10 +23,16 @@ public class Prestamos {
 	public void agregarPrestamo(Prestamo prestamo) {
 		listaPrestamos.insertar(prestamo);
 		estante.consultar(prestamo.getISBN()).setEstaPrestado(true);
+		contador++;
 	}
 
 	public void eliminar(Prestamo prestamo) {
 		listaPrestamos.eliminar(listaPrestamos.buscar(prestamo));
+		contador--;
+	}
+
+	public int getNumPrestamos() {
+		return contador;
 	}
 
 	public boolean hayPrestamos() {

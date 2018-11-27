@@ -9,10 +9,11 @@ public class Libro extends Object implements Comparable<Libro> {
 	private String edicion;
 	private boolean estaPrestado;
 	private String noControlAlumno;
-	
+
 	public Libro() {
-		
+
 	}
+
 	public Libro(String isbn, String titulo, String autor, String editorial, String edicion) {
 		this.isbn = isbn;
 		this.titulo = titulo;
@@ -34,18 +35,18 @@ public class Libro extends Object implements Comparable<Libro> {
 		this.estaPrestado = true;
 	}
 
-
-	public boolean isEstaPrestado() {
+	public boolean estaPrestado() {
 		return estaPrestado;
 	}
+
 	public void setEstaPrestado(boolean estaPrestado) {
 		this.estaPrestado = estaPrestado;
 	}
+
 	public void devolver() {
 		this.estaPrestado = false;
 		this.noControlAlumno = "No Prestado";
 	}
-
 
 	public String getIsbn() {
 		return isbn;

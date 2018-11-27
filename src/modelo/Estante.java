@@ -12,10 +12,20 @@ public class Estante {
 
 	public void agregar(Libro libro) {
 		estante.insertar(libro);
+		contador++;
 	}
 
 	public void eliminar(Pareja<Nodo<Libro>> pareja) {
 		estante.eliminar(pareja);
+		contador--;
+	}
+
+	public int getNumLibros() {
+		return contador;
+	}
+
+	public boolean hayDisponibles(Prestamos p) {
+		return contador > p.getNumPrestamos();
 	}
 
 	public boolean existeLibro(String isbn) {

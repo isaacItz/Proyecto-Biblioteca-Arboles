@@ -23,7 +23,7 @@ public class Arbol<T extends Comparable<T>> {
 					siguiente = siguiente.getHijoIzquierdo();
 
 			}
-			if (dato.compareTo(aux.getDato()) > 0)
+			if (dato.compareTo(aux.getDato()) >= 0)
 				aux.setHijoDerecho(new Nodo<T>(dato));
 			else
 				aux.setHijoIzquierdo(new Nodo<T>(dato));
